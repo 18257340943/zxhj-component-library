@@ -30,7 +30,7 @@
   "typings": "src/typings/index.d.ts",
   "scripts": {
     "init": "eslint --init",
-    "build": "webpack --config ./scripts/webpack.prod.config.js --development",
+    "build": "webpack --config ./scripts/webpack.prod.config.js",
     "start": "webpack-dev-server --config ./scripts/webpack.dev.config.js",
     "eslint:fix": "eslint --fix ./src/test.jsx",
     "lint": "eslint ./src/test.jsx",

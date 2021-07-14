@@ -14,11 +14,11 @@ import {
   initEnv,
   appState,
   loadingPage,
-  customHooks
+  customHooks,
+  cookie
 } from '../components';
 
-import { getCookie, setCookie } from '../utils/cookie';
-
+const { getCookie, setCookie } = cookie;
 
 const {
   useLoadingPage,
