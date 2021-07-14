@@ -1,0 +1,86 @@
+{
+  "name": "@zxhj/component-library",
+  "version": "3.0.66",
+  "main": "lib/component-library.js",
+  "author": "18257340943",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/18257340943/zxhj-component-library.git"
+  },
+  "homepage": "https://github.com/18257340943/zxhj-component-library",
+  "keywords": [
+    "zxhj",
+    "appState",
+    "initEnv",
+    "Components",
+    "customHooks",
+    "cookie"
+  ],
+  "description": "公司有关前后端交互、UI部分的一系列组件库",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "files": [
+    "src/**/*",
+    "script/*",
+    "lib/*"
+  ],
+  "typings": "src/typings/index.d.ts",
+  "scripts": {
+    "init": "eslint --init",
+    "build": "webpack --config ./scripts/webpack.prod.config.js --development",
+    "start": "webpack-dev-server --config ./scripts/webpack.dev.config.js",
+    "eslint:fix": "eslint --fix ./src/test.jsx",
+    "lint": "eslint ./src/test.jsx",
+    "patch": "npm version patch --no-git-tag-version",
+    "build:publish": "npm run build && npm run patch && npm publish",
+    "watch": "nodemon"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/eslint-parser": "^7.14.7",
+    "@babel/node": "^7.14.2",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-decorators": "^7.13.15",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@hot-loader/react-dom": "^17.0.1",
+    "autoprefixer": "^9.8.4",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.6.0",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "html-webpack-plugin": "^4.3.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "react-hot-loader": "^4.13.0",
+    "regenerator-runtime": "^0.13.7",
+    "style-loader": "^1.2.1",
+    "terser-webpack-plugin": "^3.0.6",
+    "types": "^0.1.1",
+    "typescript": "^4.3.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.0.9",
+    "webpack-node-externals": "^2.5.0"
+  },
+  "dependencies": {
+    "@material-ui/styles": "^4.11.3",
+    "@types/react": "^17.0.13",
+    "antd": "^4.15.2",
+    "jquery": "^3.6.0",
+    "nodemon": "^2.0.7"
+  },
+  "peerDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
