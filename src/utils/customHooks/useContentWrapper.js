@@ -1,5 +1,6 @@
 /* eslint-disable react/display-name */
 import React from 'react';
+import usePersistFn from './usePersistFn';
 import { makeStyles } from '@material-ui/styles';
 
 export default function useContentWrapper() {
@@ -11,8 +12,11 @@ export default function useContentWrapper() {
     }
   }))();
 
-  return ({ children }) => (<div
-    className={classes.contentWrapper}
-    children={children}
-  />);
+  const ContentWrapper = ({ children }) => {
+    return (<div
+      className={classes.contentWrapper}
+      children={children}
+    />)
+  };
+  return usePersistFn(ContentWrapper);
 }

@@ -2,12 +2,12 @@
 import React, { useCallback, useState } from 'react';
 import loadingPage from '@/components/loadingPage';
 
-
 export function useLoading(req, deps = [], startFn = () => { }, endFn = () => { }) {
   const reqType = "function";
   if (typeof req !== reqType) {
     throw Error('useLoading接受参数必须是' + reqType);
   }
+
   const [loading, setLoading] = useState(false);
   const wrapReq = useCallback((...args) => {
     // console.log('请求开始了');
@@ -28,22 +28,22 @@ export function useLoading(req, deps = [], startFn = () => { }, endFn = () => { 
 }
 
 export function useLoadings(reqs = [], startFn = () => { }, endFn = () => { }) {
+  const reqType = "function";
   const requests = [...reqs];
   const [loading, setLoading] = useState(false);
 
   return requests.map(request => {
-    const reqType = "function";
     if (typeof request !== reqType) {
       throw Error('useLoadings接受参数必须是' + reqType);
     }
-    console.log(loading, 'loading');
+
     return (...args) => {
       // console.log('请求开始了')
       setLoading(true);
       startFn();
       return request(...args)
         .then((data) => {
-          endFn()
+          endFn();
           setLoading(false);
           return Promise.resolve(data);
         }).catch((reason) => {
@@ -53,6 +53,7 @@ export function useLoadings(reqs = [], startFn = () => { }, endFn = () => { }) {
         });
     };
   });
+
 }
 
 export function useLoadingPage(req, deps) {

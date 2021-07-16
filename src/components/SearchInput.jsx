@@ -1,11 +1,13 @@
-import React, { useCallback, useState, useMemo, useEffect } from 'react';
+import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react';
 import { Select } from 'antd';
 import PropTypes from 'prop-types';
 
-import { appState, customHooks } from './index';
+import AppState from '../utils/appState';
+import { customHooks } from './index';
 
 const { Option } = Select;
 const { useDebounce, useLoading, useMount, useUnMount } = customHooks;
+
 
 export default function SearchInput({
   value: controlVal,
@@ -30,6 +32,11 @@ export default function SearchInput({
   ...extra
 }) {
   const [data, setData] = useState(initList);
+  const appState = useMemo(() => {
+    const instance = new AppState();
+    instance.isGetLoading = false;
+    return instance
+  }, []);
 
   const getData = useCallback((value) => appState.fetch(`/${url}`, {
     method: "GET",
@@ -51,15 +58,12 @@ export default function SearchInput({
   }, 1500, []);
 
   useMount(() => {
-    // console.log('SearchInput 组件挂载阶段');
     if (isInit) {
       handleSearch(labelInValue ? controlVal && controlVal.value || controlVal : controlVal, initQueryField);
     }
   });
 
-  useUnMount(() => {
-    // console.log('SearchInput 组件销毁阶段');
-  })
+
 
   const options = useMemo(() => data && data.map(d => <Option value={d[schema.value]} key={d[schema.key]}>{d[schema.label]}</Option>), [data, schema]);
 

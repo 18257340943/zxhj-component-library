@@ -4,6 +4,9 @@ interface ReturnLoading<F> {
   loading: boolean,
   wrapReq: F
 }
+
+declare function usePersistFn(fn: any): (...args: any[]) => never
+
 declare function useLoadings<A, S, E>(reqs: A, startFn: S, endFn: E): A;
 
 declare function useLoadingPages<A>(reqs: A): A;
@@ -22,8 +25,9 @@ interface CustomHooks {
   useLoading: typeof useLoading;
   useLoadingPage: typeof useLoadingPage;
   useDebounce: typeof useDebounce;
-  useMount: () => {};
-  useUnMount: () => {};
+  useMount: (fn: any) => void;
+  useUnMount: (fn: any) => void;
+  usePersistFn: (fn: T) => T,
   useContentWrapper: typeof useContentWrapper;
 }
 

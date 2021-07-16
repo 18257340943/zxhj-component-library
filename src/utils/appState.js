@@ -2,6 +2,7 @@
 
 import { message } from "antd";
 
+import loadingPage from "../components/loadingPage";
 import cookie from "./cookie";
 import { search, removeEmptyField } from "./utils";
 import initEnv from "./initEnv";
@@ -62,10 +63,6 @@ const _fetch = () => {
 
   function c_fetch(input, init = {}) {
 
-    // fetch默认请求方式设为GET
-    if (!init.method) {
-      init.method = "POST";
-    }
     // interceptors_req是拦截请求的拦截处理函数集合
     interceptors_req.forEach(interceptors => {
       init = interceptors(init);
@@ -96,14 +93,17 @@ const _fetch = () => {
             return;
           }
           // 部分接口通过data中的 succeed? 判断
-          if (data.succeed === 0) {
+          if (data && data.succeed === 0) {
             message.error(data && data.msg || "服务器异常！");
             return;
           }
+
           // 将拦截器处理后的响应结果resolve出去
           resolve(data);
         })
-        .catch(err => reject(err));
+        .catch(err => {
+          reject(err);
+        });
     });
   }
 
@@ -125,16 +125,26 @@ const _fetch = () => {
 class AppState {
 
   constructor() {
-    this.minTime = 100;
+    this.isGetLoading = true;
     this._fetch = _fetch();
     this.baseUrl = baseUrl;
   }
 
   // 私有属性代表appState 默认拦截处理
   #requestIntercept = (config) => {
-    let { body } = config;
-    let { headers } = config;
-    // console.log(headers, 'headers');
+    let { body, headers } = config;
+    // fetch默认请求方式设为 POST
+    if (!config.method) {
+      config.method = "POST";
+    }
+
+    // 默认 GET 请求打开
+    if (this.isGetLoading && config.method === "GET") {
+      console.log('请求开启');
+      loadingPage.start();
+    }
+    console.log(this.isGetLoading, config.method, 'isGetLoading,config.method');
+
     const loginToken = getCookie(initEnv.cookieName);
     headers = removeEmptyField(headers);
 
@@ -158,6 +168,12 @@ class AppState {
       defaultHeaders.append("Authorization", `Bearer ${loginToken}`);
     }
 
+    this.requestConfig = {
+      ...config,
+      headers: defaultHeaders,
+      body,
+    };
+
     return {
       ...config,
       headers: defaultHeaders,
@@ -166,7 +182,10 @@ class AppState {
   }
 
   #responseIntercept = (response) => {
-
+    // 默认 POST 请求打开
+    console.log(this.isGetLoading, this.requestConfig.method, 'this.requestConfig.method');
+    console.log('请求结束');
+    loadingPage.end();
     // OSS 签名认证特殊处理
     const ossUrl = "http://cdn-oss-data-zxhj.oss-cn-zhangjiakou.aliyuncs.com/";
     // 批量导出 contentType为ms-excel类型
@@ -256,6 +275,7 @@ class AppState {
     // 在请求之前针对url进行初始化处理；
     let { newURL, newINIT } = this.updateUrl(url, init);
     // 内部默认拦截器
+
     this._fetch.interceptors.request.use(this.#requestIntercept);
     this._fetch.interceptors.response.use(this.#responseIntercept);
 
@@ -264,7 +284,6 @@ class AppState {
 
 }
 
-const appState = new AppState();
 
-export default appState;
+export default AppState;
 

@@ -33,6 +33,7 @@ const LoadingPage = () => {
   return ({
     start: () => {
       if (!container.innerHTML) {
+        console.log('container 内容空节点了，可以添加节点了')
         ReactDOM.render(loadingDom, container);
       }
     },
