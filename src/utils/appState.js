@@ -139,7 +139,7 @@ class AppState {
     }
 
     // 默认 GET 请求打开
-    if (this.isGetLoading && config.method === "GET") {
+    if (this.isGetLoading ) {
       console.log('请求开启');
       loadingPage.start();
     }

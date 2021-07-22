@@ -1,28 +1,10 @@
-import React from 'react';
+import React  from 'react';
 import ReactDOM from 'react-dom';
 import { Spin } from 'antd';
 
 const LoadingPage = () => {
   let container = document.getElementById('loading-container');
-  const loadingDom = (<div
-    style={{
-      width: "100vw",
-      height: '100vh',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      zIndex: 1001,       // 默认设置高于 antd.Modal即可
-      backgroundColor: 'rgba(255, 255, 255, .5)'
-    }}>
-    <Spin
-      tip="Loading..."
-      style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50% , -50%)',
-      }} />
-  </div >);
+  
 
   if (!container) {
     container = document.createElement('div');
@@ -32,13 +14,35 @@ const LoadingPage = () => {
 
   return ({
     start: () => {
-      if (!container.innerHTML) {
+      const antModal = document.querySelector('.ant-modal-body');
+      const loadingDom = (<div style={{
+        width: "100vw",
+        height: '100vh',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 1001,       // 默认设置高于 antd.Modal即可
+        backgroundColor: 'rgba(255, 255, 255, 0.5)'
+      }}>
+        <Spin
+          tip="Loading..."
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50% , -50%)',
+          }} />
+      </div >);
+
+      if (!container.innerHTML && !antModal) {
         console.log('container 内容空节点了，可以添加节点了')
         ReactDOM.render(loadingDom, container);
       }
     },
     end: () => {
-      ReactDOM.unmountComponentAtNode(container);
+      if(container){
+        ReactDOM.unmountComponentAtNode(container);
+      }
     }
   });
 };

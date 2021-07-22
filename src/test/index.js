@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Input, Button } from 'antd';
+import { Input, Button,Modal } from 'antd';
 import {
   MyButton,
   FormContent,
@@ -63,8 +63,12 @@ const App = () => {
 
   return (
     <div>
+      <Modal visible >
       <Button onClick={loadingPage.start}>开始加载</Button>
-      <Button onClick={loadingPage.end} style={{ zIndex: 2 }}>加载结束</Button>
+      <Button onClick={loadingPage.end} style={{ zIndex: 10002 }}>加载结束</Button>
+      </Modal>
+      <Button onClick={loadingPage.start}>开始加载</Button>
+      <Button onClick={loadingPage.end} style={{ zIndex: 10002 }}>加载结束</Button>
       <Button children="测试useLoading" onClick={wrapReq} />
       {/* <LoadingPage display={loading ? 'block' : 'none'} /> */}
       <MyButton title={"1231"} />

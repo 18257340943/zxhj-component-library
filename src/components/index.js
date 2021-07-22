@@ -21,7 +21,7 @@ import AppState from '../utils/appState';
 import initEnv from '../utils/initEnv';
 import cookie from '../utils/cookie';
 
-const appState = new AppState();
+const appState = new AppState( );
 
 export {
   loadingPage,
