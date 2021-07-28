@@ -14,14 +14,18 @@ import MyInputNumber from './MyInputNumber';
 import ComImg from './ComImg';
 import theme from '../theme';
 import RadioButtons from './RadioButtons';
-import MySwitch from './MySwitch';
+import SwitchGroup from './SwitchGroup';
 import loadingPage from './loadingPage';
 import SpuInfo from './SpuInfo';
+import BasicTable from './BasicTable';
+import BasicModal from './BasicModal';
+
 import AppState from '../utils/appState';
 import initEnv from '../utils/initEnv';
 import cookie from '../utils/cookie';
 
-const appState = new AppState( );
+
+const appState = new AppState();
 
 export {
   loadingPage,
@@ -37,8 +41,10 @@ export {
   StaticTabs,
   ComImg,
   RadioButtons,
-  MySwitch,
+  SwitchGroup,
   SpuInfo,
+  BasicTable,
+  BasicModal,
   appState,
   initEnv,
   cookie,

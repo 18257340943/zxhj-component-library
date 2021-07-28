@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Input, Button,Modal } from 'antd';
+import { Input, Button, Modal } from 'antd';
 import {
   MyButton,
   FormContent,
@@ -9,6 +9,7 @@ import {
   SearchInput,
   MyInputNumber,
   SearchTop,
+  SwitchGroup,
   StaticSelect,
   ImageUpload,
   initEnv,
@@ -27,7 +28,7 @@ const {
 const { cookieName } = initEnv;
 
 const App = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ switchVal: '1' });
   const getData = () => {
     return appState.fetch('/projectSaas', {
       method: "GET",
@@ -61,108 +62,125 @@ const App = () => {
   }, []);
 
 
-  return (
-    <div>
-      <Modal visible >
-      <Button onClick={loadingPage.start}>开始加载</Button>
-      <Button onClick={loadingPage.end} style={{ zIndex: 10002 }}>加载结束</Button>
-      </Modal>
-      <Button onClick={loadingPage.start}>开始加载</Button>
-      <Button onClick={loadingPage.end} style={{ zIndex: 10002 }}>加载结束</Button>
-      <Button children="测试useLoading" onClick={wrapReq} />
-      {/* <LoadingPage display={loading ? 'block' : 'none'} /> */}
-      <MyButton title={"1231"} />
-      <MyInputNumber value={123} onChange={() => { }} />
-      {/* <ChangeButton /> */}
-      <FormContent
-        content={[
-          {
-            node: "Title",
-            key: "Title",
-            label: "标题"
-          },
-          {
-            node: "FormItem",
-            key: 'input',
-            label: 'input',
-            info: <MyInputNumber />
-          },
-          {
-            node: "FormItem",
-            key: "ImageUpload",
-            label: "图片上传",
-            info: <ImageUpload
-              value={data.ImageUpload}
-              onChange={value => updateData('ImageUpload', value)} />
-          },
-          {
-            node: "SearchTop",
-            key: "SearchTop",
-            label: "审批流程",
-            info: [
-              {
-                node: "SearchItem",
-                key: "purchaseNum",
-                label: "采购单号",
-                info: <MyDatePicker isMs={true}
-                  value={data.purchaseNum}
-                  onChange={value => updateData('purchaseNum', value)} />
-              },
-              {
-                node: "SearchItem",
-                key: "2",
-                label: "流程编号",
-                info: <MyRangePicker isMs={true} value={[data.startTime, data.endTime]} onChange={valArr => {
-                  // console.log(valArr, 'valArr')
-                  setData(
-                    {
-                      startTime: valArr[0],
-                      endTime: valArr[1]
-                    }
-                  )
-                }} />
-              },
-              {
-                node: "Btn",
-                key: "Btn",
-                label: "查找",
-              },
-            ]
-          },
-          {
-            node: 'FormItem',
-            key: 'approvalInfo',
-            label: '项目列表',
-            info: <SearchInput
-              url="projectSaas"
-              schema={{
-                value: 'id',
-                key: 'id',
-                label: 'name'
-              }}
-              initQueryField="queryField"
-              queryField="queryField"
-              value={data.projectId}
-              onChange={(value) => { setData({ ...data, projectId: value }) }}
-            />
-          },
-          {
-            node: 'FormItem',
-            key: 'custom',
-            label: 'custom',
-            info: <Input />
-          },
-          {
-            node: "FormItem",
-            key: "purchaseTable",
-            label: "审批流程",
-            info: <StaticSelect list={[{
-              label: '一',
-              value: 1
-            }]} />
-          },
-        ]} />
-    </div>
+  return (<div>
+    {/* <Modal visible onCancel={() => { console.log('onCancel') }} >
+        <Button onClick={loadingPage.start}>开始加载</Button>
+        <Button onClick={loadingPage.end} style={{ zIndex: 10002 }}>加载结束</Button>
+      </Modal> */}
+    <SwitchGroup
+      list={[{
+        value: '1',
+        label: "开关"
+      },
+      {
+        value: '2',
+        label: "状态"
+      }]}
+      value={data.switchVal}
+      onChange={value => {
+        setData({
+          ...data,
+          switchVal: value
+        })
+      }}
+    />
+    <Button onClick={loadingPage.start}>开始加载</Button>
+    <Button onClick={loadingPage.end} style={{ zIndex: 10002 }}>加载结束</Button>
+    <Button children="测试useLoading" onClick={wrapReq} />
+    {/* <LoadingPage display={loading ? 'block' : 'none'} /> */}
+    <MyButton title={"1231"} />
+    <MyInputNumber value={123} onChange={() => { }} />
+    {/* <ChangeButton /> */}
+    <FormContent
+      content={[
+        {
+          node: "titleSide",
+          key: "Title",
+          label: "标题",
+          info: <Button type="primary" children="查询" />
+        },
+        {
+          node: "FormItem",
+          key: 'input',
+          label: 'input',
+          info: <MyInputNumber />
+        },
+        {
+          node: "FormItem",
+          key: "ImageUpload",
+          label: "图片上传",
+          info: <ImageUpload
+            value={data.ImageUpload}
+            onChange={value => updateData('ImageUpload', value)} />
+        },
+        {
+          node: "SearchTop",
+          key: "SearchTop",
+          label: "审批流程",
+          info: [
+            {
+              node: "SearchItem",
+              key: "purchaseNum",
+              label: "采购单号",
+              info: <MyDatePicker isMs={true}
+                value={data.purchaseNum}
+                onChange={value => updateData('purchaseNum', value)} />
+            },
+            {
+              node: "SearchItem",
+              key: "2",
+              label: "流程编号",
+              info: <MyRangePicker isMs={true} value={[data.startTime, data.endTime]} onChange={valArr => {
+                // console.log(valArr, 'valArr')
+                setData(
+                  {
+                    startTime: valArr[0],
+                    endTime: valArr[1]
+                  }
+                )
+              }} />
+            },
+            {
+              node: "Btn",
+              key: "Btn",
+              label: "查找",
+            },
+          ]
+        },
+        {
+          node: 'FormItem',
+          key: 'approvalInfo',
+          label: '项目列表',
+          info: <SearchInput
+            url="projectSaas"
+            schema={{
+              value: 'id',
+              key: 'id',
+              label: 'name'
+            }}
+            initQueryField="queryField"
+            queryField="queryField"
+            value={data.projectId}
+            onChange={(value) => { setData({ ...data, projectId: value }) }}
+          />
+        },
+        {
+          node: 'FormItem',
+          key: 'custom',
+          label: 'custom',
+          info: <Input />
+        },
+        {
+          node: "FormItem",
+          key: "purchaseTable",
+          label: "审批流程",
+          info: <StaticSelect list={[{
+            label: '一',
+            value: 1
+          }]} />
+        },
+      ]} />
+  </div>
   )
 }
 

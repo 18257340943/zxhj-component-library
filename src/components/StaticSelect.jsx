@@ -5,20 +5,20 @@ import PropTypes from 'prop-types';
 const { Option } = Select;
 
 function StaticSelect({ list, schema, value, onChange, placeholder, style, ...extra }) {
-  return list.length > 0
-    && (<Select value={value}
-      style={style}
-      allowClear
-      placeholder={placeholder}
-      onChange={onChange} {...extra} >
-      {list.map(option => {
-        return (<Option
-          value={option[schema.value]}
-          key={option[schema.key]}
-        >{option[schema.label]}
-        </Option>)
-      })}
-    </Select>);
+
+  return (<Select value={value}
+    style={style}
+    allowClear
+    placeholder={placeholder}
+    onChange={onChange} {...extra} >
+    {list.length > 0 && list.map(option => {
+      return (<Option
+        value={option[schema.value]}
+        key={option[schema.key]}
+      >{option[schema.label]}
+      </Option>)
+    })}
+  </Select>);
 }
 
 export default StaticSelect;

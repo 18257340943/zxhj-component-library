@@ -183,7 +183,6 @@ class AppState {
 
   #responseIntercept = (response) => {
     // 默认 POST 请求打开
-    console.log(this.isGetLoading, this.requestConfig.method, 'this.requestConfig.method');
     console.log('请求结束');
     loadingPage.end();
     // OSS 签名认证特殊处理

@@ -43,7 +43,7 @@ function SearchTop({ content, ...extra }) {
           </div>)
           break;
         case 'Btn':
-          result = (<Button type="primary" className={classes.Btn} key={key} {...extra} children={label} />)
+          result = (<Button type="primary" className={classes.Btn} key={key} children={label} {...extra} />)
           break;
         case 'Custom':
           result = <div key={key} className={classes.Custom} children={info} />

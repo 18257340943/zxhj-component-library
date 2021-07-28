@@ -38,6 +38,14 @@ function FormContent({ content, formItemLayout, style, wrapperStyle, ...extra })
                 {label || info}
               </h4>)
               break;
+            case "titleSide":
+              actNode = (<div key={key} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <h4 className={classes.Title} key={key} {...extraNodeProps}>
+                  {label}
+                </h4>
+                {info}
+              </div>)
+              break;
             case "TextItem":
               actNode = (<Form.Item className={classes.TextItem} label={label} key={key} {...extraNodeProps}  >
                 {info}
@@ -50,7 +58,7 @@ function FormContent({ content, formItemLayout, style, wrapperStyle, ...extra })
               </Form.Item>);
               break;
             case "SearchTop":
-              actNode = (<SearchTop className={classes.SearchTop} key={key} content={info} {...extraNodeProps} />);
+              actNode = (<SearchTop key={key} content={info} {...extraNodeProps} />);
               break;
             case "Custom":
               actNode = (<div key={key} className={classes.Custom} {...extraNodeProps}>
@@ -59,7 +67,7 @@ function FormContent({ content, formItemLayout, style, wrapperStyle, ...extra })
               break;
             default:
               actNode = (<h4 key={key} {...extraNodeProps}>
-                {label}
+                {info}
               </h4>);
               break;
           }
