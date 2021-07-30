@@ -17,7 +17,8 @@ const limitDecimals = (value) => {
 export default function MyInputNumber({ value, onChange, style, ...extra }) {
   return (<InputNumber min={0} className="myInputNumber"
     style={style}
-    formatter={limitDecimals} parser={limitDecimals}
+    formatter={limitDecimals}
+    parser={limitDecimals}
     value={value} onChange={onChange}
     {...extra}
   />)

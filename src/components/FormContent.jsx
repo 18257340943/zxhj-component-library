@@ -53,7 +53,9 @@ function FormContent({ content, formItemLayout, style, wrapperStyle, ...extra })
               break;
             case "FormItem":
               actNode = (<Form.Item label={label} key={key}
-                className={requireUi ? `${classes.FormItem} required-item` : classes.FormItem}   {...extraNodeProps}>
+                // className="111"
+                className={requireUi ? `${classes.FormItem} required-item` : classes.FormItem}
+                {...extraNodeProps}>
                 {item.info}
               </Form.Item>);
               break;
