@@ -1,7 +1,7 @@
 {
   "name": "@zxhj/component-library",
-  "version": "3.0.78",
-  "main": "lib/component-library.js",
+  "version": "3.0.79",
+  "main": "lib",
   "author": {
     "name": "18257340943",
     "email": "18257340943@163.com"

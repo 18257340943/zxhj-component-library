@@ -20,27 +20,34 @@ export default function SwitchGroup({ label, list, value, onChange, ...extra }) 
     },
   }))();
 
-  const [switch0, switch1] = list;
-  const { label: label0, value: value0, ...extra0 } = switch0;
-  const { label: label1, value: value1, ...extra1 } = switch1;
+  // const [switch0, switch1] = list;
+  // const { label: label0, value: value0, ...extra0 } = switch0;
+  // const { label: label1, value: value1, ...extra1 } = switch1;
 
   return (<div className={classes.topWrapper} {...extra}>
-    {<div className={classes.switchBox} key={value0}>
-      <span className={classes.label}>{label0}</span>
-      <Switch
-        checked={value0 === value}
-        onChange={status => onChange(status ? value0 : value1)}
-        {...extra0}
-      />
-    </div>}
-    {<div className={classes.switchBox} key={value1}>
+    {
+      list.map(item => {
+        const { value: switchVal, label, ...extra } = item;
+        return (<div className={classes.switchBox} key={switchVal}>
+          <span className={classes.label}>{label}</span>
+          <Switch
+            checked={switchVal === value}
+            onChange={status => onChange(status ? switchVal : undefined)}
+            {...extra}
+          />
+        </div>)
+      })
+    }
+
+    { }
+    {/* {<div className={classes.switchBox} key={value1}>
       <span className={classes.label}>{label1}</span>
       <Switch
         checked={value1 === value}
         onChange={status => onChange(status ? value1 : value0)}
         {...extra1}
       />
-    </div>}
+    </div>} */}
   </div>)
 }
 

@@ -19,12 +19,15 @@ import ComImg from "./ComImg";
 // mainPic={modalData.mainPic}
 
 export default function SpuInfo({ topList, bottomList, mainPic, style }) {
+  topList = topList.filter(item => item !== null);
+  bottomList = bottomList.filter(item => item !== null);
+
   const classes = makeStyles(theme => {
     const flexBox = {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: 'center'
+      justifyContent: 'flex-start'
     };
 
     return {
@@ -70,32 +73,29 @@ export default function SpuInfo({ topList, bottomList, mainPic, style }) {
     };
   })();
 
-  const renderColBox = useCallback(
-    item => {
-      return (
-        <div
-          className={classes.colBox}
-          key={item.key}
-          children={
-            item.key === "spec" || item.key === "title" ? (
-              <div className={classes.text}>{item.text}</div>
-            ) : (
-              <>
-                {item.label && <span className={classes.label}>{item.label}</span>}
-                {item.info && (
-                  <span style={{ width: item.key === "orderNo" ? 200 : 70 }} className={classes.info}>
-                    {item.info}
-                  </span>
-                )}
-              </>
-            )
-          }
-        />
-      );
-    },
-    [classes],
-  );
-
+  const renderColBox = item => {
+    return (
+      <div
+        className={classes.colBox}
+        key={item.key}
+        children={
+          item.key === "spec" || item.key === "title" ? (
+            <div className={classes.text}>{item.text}</div>
+          ) : (
+            <>
+              {item.label && <span className={classes.label}>{item.label}</span>}
+              {item.info && (
+                <span style={{ width: item.key === "orderNo" ? 200 : 70 }} className={classes.info}>
+                  {item.info}
+                </span>
+              )}
+            </>
+          )
+        }
+      />
+    );
+  };
+  // console.log(topList, bottomList, 'topList,bottomList');
   return (
     <div className={classes.root} style={style}>
       <div className={classes.picBox}>

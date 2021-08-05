@@ -10,5 +10,4 @@ export default function BasicModal({ ...props }) {
     maskClosable={false}
     {...props}
   />)
-
 }

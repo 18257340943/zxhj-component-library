@@ -3,7 +3,7 @@
 
 class InitEnv {
   constructor() {
-    console.log(buildEnv, appName, 'buildEnv, appName ');
+    this.env = buildEnv === "online" ? "" : "pre";
     this.notLoginUrl = `//${buildEnv === "online" ? "" : "pre."}zxhj618.com/login`;
     this.baseUrl = `//${buildEnv === "online" ? "" : "pre-"}main-service.zxhj618.com`;
     this.mallUrl = `//${buildEnv === "online" ? "" : "pre-"}saas-mall.zxhj618.com`;

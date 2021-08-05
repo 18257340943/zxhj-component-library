@@ -21,4 +21,5 @@ export { default as appState } from '../utils/appState';
 export { default as initEnv } from '../utils/initEnv';
 export { default as customHooks } from '../utils/customHooks';
 export { default as cookie } from '../utils/cookie';
+export { default as localStorage } from '../utils/localStorage';
 export declare const theme: object;

@@ -10,7 +10,7 @@ const { merge } = require('webpack-merge');
 const webpackConfigProd = {
   mode: 'development',
   entry: {
-    "component-library": resolve(__dirname, '../src/components/index.js')
+    "index": resolve(__dirname, '../src/components/index.js')
   },
   output: {
     filename: '[name].js',

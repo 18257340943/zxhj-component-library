@@ -24,6 +24,7 @@ import BasicModal from './BasicModal';
 import AppState from '../utils/appState';
 import initEnv from '../utils/initEnv';
 import cookie from '../utils/cookie';
+import localStorage from '../utils/localStorage';
 
 
 const appState = new AppState();
@@ -49,6 +50,7 @@ export {
   appState,
   initEnv,
   cookie,
+  localStorage,
   theme,
   customHooks
 }
