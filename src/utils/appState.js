@@ -139,11 +139,11 @@ class AppState {
     }
 
     // 默认 GET 请求打开
-    if (this.isGetLoading ) {
-      console.log('请求开启');
+    if (this.isGetLoading) {
+      // console.log('请求开启');
       loadingPage.start();
     }
-    console.log(this.isGetLoading, config.method, 'isGetLoading,config.method');
+    // console.log(this.isGetLoading, config.method, 'isGetLoading,config.method');
 
     const loginToken = getCookie(initEnv.cookieName);
     headers = removeEmptyField(headers);
@@ -183,7 +183,7 @@ class AppState {
 
   #responseIntercept = (response) => {
     // 默认 POST 请求打开
-    console.log('请求结束');
+    // console.log('请求结束');
     loadingPage.end();
     // OSS 签名认证特殊处理
     const ossUrl = "http://cdn-oss-data-zxhj.oss-cn-zhangjiakou.aliyuncs.com/";

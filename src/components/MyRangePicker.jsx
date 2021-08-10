@@ -15,7 +15,6 @@ export default function MyRangePicker({
   type,
   isMs,
   format,
-  style,
   ...extra }) {
 
   let result;

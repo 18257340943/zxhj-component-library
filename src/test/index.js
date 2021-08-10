@@ -23,7 +23,7 @@ const { getCookie, setCookie } = cookie;
 
 const {
   useLoadingPage,
-  useLoading
+  useLoading,
 } = customHooks;
 const { cookieName } = initEnv;
 
