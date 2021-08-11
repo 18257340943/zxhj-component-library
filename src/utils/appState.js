@@ -130,49 +130,73 @@ class AppState {
     this.baseUrl = baseUrl;
   }
 
-  // 私有属性代表appState 默认拦截处理
-  #requestIntercept = (config) => {
-    let { body, headers } = config;
-    // fetch默认请求方式设为 POST
-    if (!config.method) {
-      config.method = "POST";
+  static updateBody(body, formData) {
+    // 处理FormData数据
+    if (formData) {
+      const _formData = new FormData();
+      formData = removeEmptyField(formData);
+      Object.keys(formData).forEach(key => {
+        _formData.append(key, formData[key]);
+      });
+      body = _formData;
     }
-
-    // 默认 GET 请求打开
-    if (this.isGetLoading) {
-      // console.log('请求开启');
-      loadingPage.start();
-    }
-    // console.log(this.isGetLoading, config.method, 'isGetLoading,config.method');
-
-    const loginToken = getCookie(initEnv.cookieName);
-    headers = removeEmptyField(headers);
-
-    const defaultHeaders = new Headers({
-      "Content-Type": "application/json", // 默认上传类型
-      ...headers,
-    });
-
-    // console.log(defaultHeaders.get('projectId'));
     // form-data数据类型 更改 content-type 类型为自适应
     if (body) {
-      if (Object.getPrototypeOf(body).constructor.name === "FormData") {
-        defaultHeaders.delete("Content-Type");
-      } else {
-        body = typeof body === "object" ? JSON.stringify(removeEmptyField(body)) : body;
-      }
+      body = typeof body === "object" ? JSON.stringify(removeEmptyField(body)) : body;
     }
 
+    return body
+  }
+
+  static updateHeader(body, headers) {
+    const loginToken = getCookie(initEnv.cookieName);
+    // 初始化默认头部
+    const defaultHeaders = new Headers({
+      "Content-Type": "application/json",
+      ...removeEmptyField(headers),
+    });
+    // 假如body类型为FormData,则header头部删除Content-type，改为自适应
+    if (Object.getPrototypeOf(body).constructor.name === "FormData") {
+      defaultHeaders.delete("Content-Type");
+    }
     // 请求前拦截，用户登录情况下写入请求头token
     if (loginToken && loginToken !== "undefined") {
       defaultHeaders.append("Authorization", `Bearer ${loginToken}`);
     }
 
-    this.requestConfig = {
-      ...config,
-      headers: defaultHeaders,
-      body,
-    };
+    return defaultHeaders
+  }
+
+
+  // 私有属性代表appState 默认拦截处理
+  #requestIntercept = (config) => {
+    let { body, headers, formData } = config;
+    const loginToken = getCookie(initEnv.cookieName);
+    // fetch默认请求方式设为 POST
+    if (!config.method) { config.method = "POST" }
+    // 默认 GET 请求打开
+    if (this.isGetLoading) { loadingPage.start() }
+
+    headers = AppState.updateHeader()
+
+    // const defaultHeaders = new Headers({
+    //   "Content-Type": "application/json", // 默认上传类型
+    //   ...removeEmptyField(headers),
+    // });
+
+    // // form-data数据类型 更改 content-type 类型为自适应
+    // if (body) {
+    //   if (Object.getPrototypeOf(body).constructor.name === "FormData") {
+    //     defaultHeaders.delete("Content-Type");
+    //   } else {
+    //     body = typeof body === "object" ? JSON.stringify(removeEmptyField(body)) : body;
+    //   }
+    // }
+
+    // // 请求前拦截，用户登录情况下写入请求头token
+    // if (loginToken && loginToken !== "undefined") {
+    //   defaultHeaders.append("Authorization", `Bearer ${loginToken}`);
+    // }
 
     return {
       ...config,
