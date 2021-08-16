@@ -63,8 +63,8 @@ function FormContent({ content, formItemLayout, style, wrapperStyle, ...extra })
               break;
             case "Custom":
               actNode = (<div key={key} className={classes.Custom} {...extraNodeProps}>
-                {item.children}
                 {info}
+                {item.children}
               </div>);
               break;
             default:

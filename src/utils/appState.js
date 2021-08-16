@@ -34,7 +34,6 @@ function addSearch(url, init) {
     newINIT: init,
   };
 }
-
 // 为baseUrl 添加 pathUrl
 function addPathUrl(baseUrl, url) {
   let newURL = '';
@@ -44,7 +43,6 @@ function addPathUrl(baseUrl, url) {
   }
 
 }
-
 // 部分业务支持重写 url
 function initUrl(url, init) {
   let newURL = url;
@@ -54,7 +52,6 @@ function initUrl(url, init) {
   }
   return newURL
 }
-
 // 带有请求拦截器的 fetch
 const _fetch = () => {
   // 定义用来存储拦截请求和拦截响应结果的处理函数集合
@@ -62,12 +59,12 @@ const _fetch = () => {
   let interceptors_res = [];
 
   function c_fetch(input, init = {}) {
-
     // interceptors_req是拦截请求的拦截处理函数集合
     interceptors_req.forEach(interceptors => {
       init = interceptors(init);
     });
     interceptors_req = [];
+
     return new Promise((resolve, reject) => {
       // 发起fetch请求，fetch请求的形参是接收上层函数的形参
       fetch(input, init)
@@ -122,15 +119,20 @@ const _fetch = () => {
   return c_fetch;
 };
 
+// 经实例化以后可直接调用 appState.uploadFile() | appState.fetch()
 class AppState {
 
-  constructor() {
-    this.isGetLoading = true;
-    this._fetch = _fetch();
-    this.baseUrl = baseUrl;
-  }
-
   static updateBody(body, formData) {
+    formData = formData && { ...formData };
+    if (!body) {
+      return body
+    }
+
+    // body为 FormData类型
+    if (Object.getPrototypeOf(body).constructor.name === "FormData" || typeof body === "string") {
+      return body
+    }
+
     // 处理FormData数据
     if (formData) {
       const _formData = new FormData();
@@ -139,16 +141,14 @@ class AppState {
         _formData.append(key, formData[key]);
       });
       body = _formData;
-    }
-    // form-data数据类型 更改 content-type 类型为自适应
-    if (body) {
-      body = typeof body === "object" ? JSON.stringify(removeEmptyField(body)) : body;
+      return body
     }
 
-    return body
+    return JSON.stringify(body);
   }
 
   static updateHeader(body, headers) {
+    headers = headers && { ...headers };
     const loginToken = getCookie(initEnv.cookieName);
     // 初始化默认头部
     const defaultHeaders = new Headers({
@@ -156,7 +156,7 @@ class AppState {
       ...removeEmptyField(headers),
     });
     // 假如body类型为FormData,则header头部删除Content-type，改为自适应
-    if (Object.getPrototypeOf(body).constructor.name === "FormData") {
+    if (body && Object.getPrototypeOf(body).constructor.name === "FormData") {
       defaultHeaders.delete("Content-Type");
     }
     // 请求前拦截，用户登录情况下写入请求头token
@@ -167,47 +167,31 @@ class AppState {
     return defaultHeaders
   }
 
+  constructor() {
+    this.isGetLoading = true;
+    this._fetch = _fetch();
+    this.baseUrl = baseUrl;
+  }
 
   // 私有属性代表appState 默认拦截处理
   #requestIntercept = (config) => {
     let { body, headers, formData } = config;
-    const loginToken = getCookie(initEnv.cookieName);
     // fetch默认请求方式设为 POST
     if (!config.method) { config.method = "POST" }
     // 默认 GET 请求打开
     if (this.isGetLoading) { loadingPage.start() }
 
-    headers = AppState.updateHeader()
-
-    // const defaultHeaders = new Headers({
-    //   "Content-Type": "application/json", // 默认上传类型
-    //   ...removeEmptyField(headers),
-    // });
-
-    // // form-data数据类型 更改 content-type 类型为自适应
-    // if (body) {
-    //   if (Object.getPrototypeOf(body).constructor.name === "FormData") {
-    //     defaultHeaders.delete("Content-Type");
-    //   } else {
-    //     body = typeof body === "object" ? JSON.stringify(removeEmptyField(body)) : body;
-    //   }
-    // }
-
-    // // 请求前拦截，用户登录情况下写入请求头token
-    // if (loginToken && loginToken !== "undefined") {
-    //   defaultHeaders.append("Authorization", `Bearer ${loginToken}`);
-    // }
+    const newHeader = AppState.updateHeader(body, headers);
+    const newBody = AppState.updateBody(body, formData);
 
     return {
       ...config,
-      headers: defaultHeaders,
-      body,
+      headers: newHeader,
+      body: newBody,
     };
   }
 
   #responseIntercept = (response) => {
-    // 默认 POST 请求打开
-    // console.log('请求结束');
     loadingPage.end();
     // OSS 签名认证特殊处理
     const ossUrl = "http://cdn-oss-data-zxhj.oss-cn-zhangjiakou.aliyuncs.com/";
@@ -215,8 +199,9 @@ class AppState {
     const isXls = response.headers.get('content-type') && response.headers.get('content-type').indexOf("application/vnd.ms-excel") > -1;
     if (response.url === ossUrl && response.status === 200) {
       return { code: 200 };
-      // 确认返回类型是 xls 表格系列
-    } else if (isXls) {
+    }
+    // 确认返回类型是 xls 表格系列
+    if (isXls) {
       return response.blob().then(blob => {
         let url = window.URL.createObjectURL(blob);
         let disposition = response.headers.get('Content-Disposition');
@@ -231,21 +216,21 @@ class AppState {
         window.URL.revokeObjectURL(url);
         return { code: 200, data: true };
       });
-    } else {
-      return response
     }
+
+    return response
 
   }
 
   // 针对请求路径和配置做进一步处理啊
-  updateUrl(url, init) {
+  #updateUrl(url, init) {
     url = addPathUrl(this.baseUrl, url);
     url = initUrl(url, init);
     const { newURL, newINIT } = addSearch(url, init);
     return { newURL, newINIT };
   }
 
-  getOSS() {
+  #getOSS() {
     return this.fetch('/upload/uploadPolicy', {
       method: "GET"
     })
@@ -267,7 +252,7 @@ class AppState {
           resolve({ link });
         })
       } else {
-        this.getOSS().then(data => {
+        this.#getOSS().then(data => {
           const { accessid, cdnPath, dir, host, policy, signature } = data;
           const ossFormData = new FormData();
           ossFormData.append('key', `${dir}${name}`); //存储在oss的文件路径
@@ -285,18 +270,15 @@ class AppState {
               link: cdnPath + name
             })
           })
-
         })
-
       }
-
-
     })
   }
 
+  // 通用请求
   fetch(url, init) {
     // 在请求之前针对url进行初始化处理；
-    let { newURL, newINIT } = this.updateUrl(url, init);
+    let { newURL, newINIT } = this.#updateUrl(url, init);
     // 内部默认拦截器
 
     this._fetch.interceptors.request.use(this.#requestIntercept);
