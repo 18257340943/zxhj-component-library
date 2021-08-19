@@ -64,7 +64,6 @@ const _fetch = () => {
       init = interceptors(init);
     });
     interceptors_req = [];
-
     return new Promise((resolve, reject) => {
       // 发起fetch请求，fetch请求的形参是接收上层函数的形参
       fetch(input, init)
@@ -280,10 +279,8 @@ class AppState {
     // 在请求之前针对url进行初始化处理；
     let { newURL, newINIT } = this.#updateUrl(url, init);
     // 内部默认拦截器
-
     this._fetch.interceptors.request.use(this.#requestIntercept);
     this._fetch.interceptors.response.use(this.#responseIntercept);
-
     return this._fetch(newURL, newINIT);
   }
 
