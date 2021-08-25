@@ -23,7 +23,7 @@ export default function SwitchGroup({ label, list, value, onChange, ...extra }) 
   // const [switch0, switch1] = list;
   // const { label: label0, value: value0, ...extra0 } = switch0;
   // const { label: label1, value: value1, ...extra1 } = switch1;
-
+  // switch 默认也支持参数配置;
   return (<div className={classes.topWrapper} {...extra}>
     {
       list.map(item => {

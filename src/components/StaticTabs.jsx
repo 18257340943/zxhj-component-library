@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 
 export default function StaticTabs({ list, value, onChange, ...extra }) {
+  list = list || [];
   return (
     <Tabs
       activeKey={String(value)}
@@ -14,14 +15,10 @@ export default function StaticTabs({ list, value, onChange, ...extra }) {
     </Tabs>);
 }
 
-StaticTabs.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-  })).isRequired,
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired
-}
-StaticTabs.defaultProps = {
-  value: '',
-}
+// StaticTabs.propTypes = {
+//   value: PropTypes.string,
+//   onChange: PropTypes.func.isRequired
+// }
+// StaticTabs.defaultProps = {
+//   value: '',
+// }

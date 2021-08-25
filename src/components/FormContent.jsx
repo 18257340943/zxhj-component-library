@@ -24,7 +24,7 @@ function FormContent({ content, formItemLayout, style, wrapperStyle, ...extra })
     SearchTop: {},
     Custom: {}
   }))();
-  // console.log(111);
+
   return (<div className={classes.FormContent} style={wrapperStyle}>
     <Form {...formItemLayout} labelAlign="left" style={style} {...extra} >
       {

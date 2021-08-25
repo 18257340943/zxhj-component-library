@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 
 // import { Button  } from 'antd';
 
-export default function MyButton({ title, type, onClick, children, ...extra }) {
+export default function MyButton({ type, onClick, children, ...extra }) {
 
   function confirm() {
     Modal.confirm({
-      title,
+      ...extra,
       onOk: onClick,
       okText: "确认",
       cancelText: "取消"
@@ -18,7 +18,6 @@ export default function MyButton({ title, type, onClick, children, ...extra }) {
   return (<Button
     type={type}
     onClick={confirm}
-    {...extra}
     children={children} />)
 }
 

@@ -143,7 +143,7 @@ class AppState {
       return body
     }
 
-    return JSON.stringify(body);
+    return JSON.stringify(removeEmptyField(body));
   }
 
   static updateHeader(body, headers) {
@@ -216,9 +216,7 @@ class AppState {
         return { code: 200, data: true };
       });
     }
-
     return response
-
   }
 
   // 针对请求路径和配置做进一步处理啊
