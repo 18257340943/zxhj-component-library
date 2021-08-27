@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import './style.css';
 
 import customHooks from '../utils/customHooks';
