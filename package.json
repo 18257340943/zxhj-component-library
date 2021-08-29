@@ -1,7 +1,8 @@
 {
   "name": "@zxhj/component-library",
-  "version": "3.0.89",
+  "version": "3.0.93",
   "main": "lib",
+  "module": "lib/index.js",
   "author": {
     "name": "18257340943",
     "email": "18257340943@163.com"
@@ -42,6 +43,7 @@
     "watch": "nodemon"
   },
   "devDependencies": {
+    "@types/react": "^17.0.13",
     "@babel/core": "^7.14.3",
     "@babel/eslint-parser": "^7.14.7",
     "@babel/node": "^7.14.2",
@@ -79,14 +81,7 @@
     "webpack-merge": "^5.0.9",
     "webpack-node-externals": "^2.5.0"
   },
-  "dependencies": {
-    "@material-ui/styles": "^4.11.4",
-    "@types/react": "^17.0.13",
-    "antd": "^4.16.13",
-    "jquery": "^3.6.0",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": ">=17.0.1",
     "react-dom": ">=17.0.1",
