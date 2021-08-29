@@ -25,7 +25,7 @@ const useUnMount = (fn) => {
   useEffect(
     () => () => {
       if (fnPersist && typeof fnPersist === 'function') {
-        console.log('useUnMount')
+        // console.log('useUnMount')
         fnPersist();
       }
     },

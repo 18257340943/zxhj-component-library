@@ -25,9 +25,8 @@ import initEnv from '../utils/initEnv';
 import cookie from '../utils/cookie';
 import localStorage from '../utils/localStorage';
 
-
 const appState = new AppState();
-
+console.log( buildEnv ,'buildEnv')
 export {
   loadingPage,
   MyButton,

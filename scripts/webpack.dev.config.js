@@ -12,7 +12,6 @@ const webpackConfigDev = {
     filename: 'index.js',
   },
   devtool: 'cheap-module-eval-source-map',
-
   devServer: {
     contentBase: resolve('../build'),
     hot: true,
@@ -20,14 +19,13 @@ const webpackConfigDev = {
     host: 'localhost',
     port: 8080,
   },
-
   plugins: [
     new HtmlWebpackPlugin({ template: './public/index.html', }),
-    new webpack.NamedModulesPlugin(),
-    new webpack.DefinePlugin({
-      "buildEnv": JSON.stringify(process.env.BUILD_ENV || 'pre-release'),
-      "appName": JSON.stringify(process.env.APP_NAME || 'SAAS')
-    }),
+    // new webpack.NamedModulesPlugin(),
+    // new webpack.DefinePlugin({
+    //   "buildEnv": JSON.stringify(process.env.BUILD_ENV || 'pre-release'),
+    //   "appName": JSON.stringify(process.env.APP_NAME || 'SAAS')
+    // }),
     new webpack.HotModuleReplacementPlugin()
   ]
 }
