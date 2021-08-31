@@ -43,7 +43,6 @@
     "watch": "nodemon"
   },
   "devDependencies": {
-    "@types/react": "^17.0.13",
     "@babel/core": "^7.14.3",
     "@babel/eslint-parser": "^7.14.7",
     "@babel/node": "^7.14.2",
@@ -52,6 +51,7 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-react": "^7.10.4",
     "@hot-loader/react-dom": "^17.0.1",
+    "@types/react": "^17.0.13",
     "autoprefixer": "^9.8.4",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
@@ -81,12 +81,11 @@
     "webpack-merge": "^5.0.9",
     "webpack-node-externals": "^2.5.0"
   },
-  "dependencies": {},
   "peerDependencies": {
-    "react": ">=17.0.1",
-    "react-dom": ">=17.0.1",
+    "@material-ui/styles": ">=4.11.3",
     "antd": ">=4.15.2",
-    "@material-ui/styles": ">=4.11.3"
+    "react": ">=17.0.1",
+    "react-dom": ">=17.0.1"
   },
   "sideEffects": false
 }

@@ -15,15 +15,15 @@ const webpackConfigProd = {
   output: {
     filename: '[name].js',
     path: resolve(__dirname, '../lib'),
-    // library: '@zxhj/component-library',
-    // libraryTarget: 'umd'
+    library: '@zxhj/component-library',
+    libraryTarget: 'umd'
   },
-  // externals: [
-  //   "react",
-  //   'react-dom',
-  //   'antd',
-  //   '@ant-design/icons'
-  // ],
+  externals: [
+    "react",
+    'react-dom',
+    'antd',
+    '@ant-design/icons'
+  ],
   devtool: 'source-map',  //或使用'cheap-module-source-map'、'none'
   optimization: {
     minimizer: [
@@ -32,25 +32,25 @@ const webpackConfigProd = {
       //压缩css代码
       new OptimizeCSSAssetsPlugin()
     ],
-  // 组件库不能随意分割代码
-  //   splitChunks: { 
-  //     chunks: 'all',
-  //     cacheGroups: {
-  //       antd: {
-  //         test: /[\\/]node_modules[\\/]antd[\\/]/,
-  //         priority: 15,
-  //         enforce: true,
-  //         name: "antd"
-  //       }
-  //     }
-  //  }
+    // 组件库不能随意分割代码
+    //   splitChunks: { 
+    //     chunks: 'all',
+    //     cacheGroups: {
+    //       antd: {
+    //         test: /[\\/]node_modules[\\/]antd[\\/]/,
+    //         priority: 15,
+    //         enforce: true,
+    //         name: "antd"
+    //       }
+    //     }
+    //  }
   },
   // 通过nodeExternals()将打包组件内的react等依赖给去除了
   // externals: [
   //   nodeExternals()
   // ], 
   plugins: [
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
     new CleanWebpackPlugin()     //每次执行都将清空一下./dist目录
   ]
 }
