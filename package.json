@@ -34,7 +34,8 @@
   "typings": "src/typings/index.d.ts",
   "scripts": {
     "init": "eslint --init",
-    "build": "webpack --config ./scripts/webpack.prod.config.js",
+    "build": "webpack --config ./scripts/webpack.prod.config.js --mode production",
+    "build:dev": "webpack --config ./scripts/webpack.prod.config.js --mode development",
     "start": "webpack-dev-server --config ./scripts/webpack.dev.config.js",
     "eslint:fix": "eslint --fix ./src/test.jsx",
     "lint": "eslint ./src/test.jsx",

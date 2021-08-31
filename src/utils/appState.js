@@ -6,6 +6,7 @@ import loadingPage from "../components/loadingPage";
 import cookie from "./cookie";
 import { search, removeEmptyField } from "./utils";
 import initEnv from "./initEnv";
+import c_fetch from "./c_fetch";
 
 const { getCookie } = cookie;
 const { baseUrl } = initEnv;
@@ -53,70 +54,68 @@ function initUrl(url, init) {
   return newURL
 }
 // 带有请求拦截器的 fetch
-const _fetch = () => {
-  // 定义用来存储拦截请求和拦截响应结果的处理函数集合
-  let interceptors_req = [];
-  let interceptors_res = [];
+// const _fetch = (() => {
+//   // 定义用来存储拦截请求和拦截响应结果的处理函数集合
+//   let interceptors_req = [];
+//   let interceptors_res = [];
 
-  function c_fetch(input, init = {}) {
-    // interceptors_req是拦截请求的拦截处理函数集合
-    interceptors_req.forEach(interceptors => {
-      init = interceptors(init);
-    });
-    interceptors_req = [];
-    return new Promise((resolve, reject) => {
-      // 发起fetch请求，fetch请求的形参是接收上层函数的形参
-      fetch(input, init)
-        .then(res => {
-          interceptors_res.forEach(interceptors => {
-            // 拦截器对响应结果做  处理，把处理后的结果返回给响应结果。
-            res = interceptors(res);
-          });
-          interceptors_res = [];
-          // 常规数据返回 res.json()
-          if (Object.getPrototypeOf(res).constructor.name === "Response") {
-            return res.json();
-          }
-          resolve(res);
-        })
-        .then(result => {
-          const { data, code } = result;
-          // 通过 code === 200? 认证直接报错
-          if (code !== 200) {
-            const errorMsg = data && data.message || "服务器异常！";
-            message.error(errorMsg);
-            reject(errorMsg);
-            return;
-          }
-          // 部分接口通过data中的 succeed? 判断
-          if (data && data.succeed === 0) {
-            message.error(data && data.msg || "服务器异常！");
-            return;
-          }
+//   function c_fetch(input, init = {}) {
+//     // interceptors_req是拦截请求的拦截处理函数集合
+//     interceptors_req.forEach(interceptors => init = interceptors(init));
+//     // interceptors_req = [];
+//     return new Promise((resolve, reject) => {
+//       // 发起fetch请求，fetch请求的形参是接收上层函数的形参
+//       fetch(input, init)
+//         .then(res => {
+//           // interceptors_res.forEach(interceptors => {
+//           //   // 拦截器对响应结果做  处理，把处理后的结果返回给响应结果。
+//           //   res = interceptors(res);
+//           // });
+//           // interceptors_res = [];
+//           // 常规数据返回 res.json()
+//           if (Object.getPrototypeOf(res).constructor.name === "Response") {
+//             return res.json();
+//           }
+//           resolve(res);
+//         })
+//         .then(result => {
+//           const { data, code } = result;
+//           // 通过 code === 200? 认证直接报错
+//           if (code !== 200) {
+//             const errorMsg = data && data.message || "服务器异常！";
+//             message.error(errorMsg);
+//             reject(errorMsg);
+//             return;
+//           }
+//           // 部分接口通过data中的 succeed? 判断
+//           if (data && data.succeed === 0) {
+//             message.error(data && data.msg || "服务器异常！");
+//             return;
+//           }
 
-          // 将拦截器处理后的响应结果resolve出去
-          resolve(data);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
+//           // 将拦截器处理后的响应结果resolve出去
+//           resolve(data);
+//         })
+//         .catch(err => {
+//           reject(err);
+//         });
+//     });
+//   }
 
-  c_fetch.interceptors = {
-    request: {
-      use(callback) {
-        interceptors_req.push(callback);
-      },
-    },
-    response: {
-      use(callback) {
-        interceptors_res.push(callback);
-      },
-    },
-  };
-  return c_fetch;
-};
+//   c_fetch.interceptors = {
+//     request: {
+//       use(callback) {
+//         interceptors_req.push(callback);
+//       },
+//     },
+//     response: {
+//       use(callback) {
+//         interceptors_res.push(callback);
+//       },
+//     },
+//   };
+
+// })();
 
 // 经实例化以后可直接调用 appState.uploadFile() | appState.fetch()
 class AppState {
@@ -168,12 +167,12 @@ class AppState {
 
   constructor() {
     this.isGetLoading = true;
-    this._fetch = _fetch();
+    // this._fetch = _fetch();
     this.baseUrl = baseUrl;
   }
 
   // 私有属性代表appState 默认拦截处理
-  #requestIntercept = (config) => {
+  #willRequest = (config) => {
     console.log('开始请求', config);
     let { body, headers, formData } = config;
     // fetch默认请求方式设为 POST
@@ -191,7 +190,7 @@ class AppState {
     };
   }
 
-  #responseIntercept = (response) => {
+  #willResponse = (response) => {
     console.log('结束请求', response.url);
     loadingPage.end();
     // OSS 签名认证特殊处理
@@ -276,12 +275,21 @@ class AppState {
 
   // 通用请求
   fetch(url, init) {
-    // 在请求之前针对url进行初始化处理；
     let { newURL, newINIT } = this.#updateUrl(url, init);
-    // 内部默认拦截器
-    this._fetch.interceptors.request.use(this.#requestIntercept);
-    this._fetch.interceptors.response.use(this.#responseIntercept);
-    return this._fetch(newURL, newINIT);
+    return c_fetch({
+      input: newURL,
+      init: newINIT,
+      willRequest: this.#willRequest,
+      willResponse: this.#willResponse
+    });
+  }
+
+  requestIntercept(callback) {
+    c_fetch.interceptors.request.use(callback);
+  }
+
+  responseIntercept(callback) {
+    c_fetch.interceptors.response.use(callback)
   }
 
 }

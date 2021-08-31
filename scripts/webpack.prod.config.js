@@ -8,7 +8,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { merge } = require('webpack-merge');
 
 const webpackConfigProd = {
-  mode: 'production',
+  // mode: 'production',
   entry: {
     "index": resolve(__dirname, '../src/components/index.js')
   },
