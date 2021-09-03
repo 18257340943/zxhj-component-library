@@ -7,7 +7,7 @@ import { calcScrollX } from '../utils/utils';
 export default function BasicTable({ columns, pagination, ...extraProps }) {
 
   return (<Table
-    columns={columns.filter(col => col !== null)}
+    columns={columns.filter(Boolean)}
     scroll={{
       x: calcScrollX(columns),
     }}

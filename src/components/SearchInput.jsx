@@ -6,8 +6,11 @@ import AppState from '../utils/appState';
 import { customHooks } from './index';
 
 const { Option } = Select;
-const { useDebounce, useLoading, useMount, useUnMount } = customHooks;
+const { useDebounce, useLoading, useMount } = customHooks;
 
+// SearchInput页面应用主要有两种情况 
+// 页面级：路由切换，应保持原有数据，需要默认 labelInValue 初始化值；
+// 弹窗：只需要保存当前value值即可，弹窗关闭打开时只需要配合initList 保存当前value，label即可；
 
 export default function SearchInput({
   value: controlVal,
@@ -15,7 +18,6 @@ export default function SearchInput({
   initList,         // 初始化数据配置
 
   style,
-  // loading,          // 部分搜索下拉框value值更新依赖于其他业务接口的loading状态
   isInit,           // 是否初始化请求数据
   url,              // 根目录
   headers,          // 默认头部 
@@ -28,52 +30,52 @@ export default function SearchInput({
   dataIndex,        // list数据源对应字段映射 类似 antd.Table 使用
   schema,           // 数据映射字段配置
 
-  labelInValue,     // 用于初始化时请求字段, 尽量不推荐使用
+  labelInValue,     // 绑定数据为{ value: "string" , label: "string" } 需与接口配合使用
   ...extra
 }) {
-  const [data, setData] = useState(initList);
+  const [data, setData] = useState(initList || []);
   const appState = useMemo(() => {
     const instance = new AppState();
     instance.isGetLoading = false;
     return instance
   }, []);
 
-  const getData = useCallback((value) => appState.fetch(`/${url}`, {
+  const getData = useCallback((value, oneOfField) => appState.fetch(`/${url}`, {
     method: "GET",
     headers,
     [paramType]: {
       ...defaultPage,
-      [queryField]: value
+      [oneOfField]: value
     }
-  }), [defaultPage, headers, paramType, queryField, url]);
+  }), [appState, defaultPage, headers, paramType, url]);
 
   const { loading, wrapReq } = useLoading(getData, []);
 
-  const handleSearch = useDebounce(async (value) => {
-    // console.log('开始执行')
+  const handleSearch = useDebounce(async (value, oneOfField) => {
     let dataSource;
-    const data = await wrapReq(value);
+    const data = await wrapReq(value, oneOfField);
     dataSource = dataIndex.length > 0 ? data[dataIndex[0]] : data;
     setData(dataSource);
   }, 1500, []);
 
   useMount(() => {
     if (isInit) {
-      handleSearch(labelInValue ? controlVal && controlVal.value || controlVal : controlVal, initQueryField);
+      handleSearch(labelInValue ? controlVal?.value : controlVal, initQueryField);
     }
   });
 
-
-
-  const options = useMemo(() => data && data.map(d => <Option value={d[schema.value]} key={d[schema.key]}>{d[schema.label]}</Option>), [data, schema]);
-
   const onSearch = useCallback((value) => {
     if (value) {
-      handleSearch(value);
+      handleSearch(value, queryField);
     }
-  }, [handleSearch]);
+  }, [handleSearch, queryField]);
+
+  const onFocus = useCallback(() => {
+    data.length === 0 && handleSearch(undefined, queryField)
+  }, [data.length, handleSearch, queryField]);
 
   return (<Select
+    onFocus={onFocus}
     filterOption={false}        // 关闭下拉框自动筛选功能
     loading={loading}
     showSearch
@@ -84,7 +86,7 @@ export default function SearchInput({
     onChange={onChange}
     {...extra}
   >
-    {options}
+    {data && data.map(d => <Option value={d[schema.value]} key={d[schema.key]}>{d[schema.label]}</Option>)}
   </Select>)
 }
 

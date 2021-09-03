@@ -97,3 +97,20 @@ export function search(searchObj) {
     .map((key) => `${key}=${searchObj[key]}`)
     .join("&")}` : '';
 }
+// 扁平化 requestData对象
+export function peerRequestData(requestData) {
+  const obj = {};
+  for (const key in requestData) {
+    if (Object.hasOwnProperty.call(requestData, key)) {
+      const value = requestData[key];
+      obj[key] = typeof value === "object" ? value.value : value
+    }
+  }
+  return obj
+}
+
+
+
+
+
+

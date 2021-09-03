@@ -24,9 +24,10 @@ import AppState from '../utils/appState';
 import initEnv from '../utils/initEnv';
 import cookie from '../utils/cookie';
 import localStorage from '../utils/localStorage';
+import * as utils from '../utils/utils';
 
 const appState = new AppState();
-console.log( buildEnv ,'buildEnv')
+// console.log(buildEnv, 'buildEnv')
 export {
   loadingPage,
   MyButton,
@@ -50,5 +51,6 @@ export {
   cookie,
   localStorage,
   theme,
-  customHooks
+  customHooks,
+  utils
 }
