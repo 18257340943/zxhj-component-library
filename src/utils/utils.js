@@ -1,4 +1,5 @@
 import { message } from "antd";
+import qs from 'querystring';
 
 // 删除 obj 对象里面 value 为 undefined，null，''
 export const removeEmptyField = (obj) => {
@@ -107,6 +108,10 @@ export function peerRequestData(requestData) {
     }
   }
   return obj
+}
+
+export function deserialization(str) {
+  return qs.parse(str);
 }
 
 

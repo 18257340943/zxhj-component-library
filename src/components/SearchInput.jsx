@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react';
+import React, { memo, useCallback, useState, useMemo, useEffect, useRef } from 'react';
 import { Select } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -6,13 +6,13 @@ import AppState from '../utils/appState';
 import { customHooks } from './index';
 
 const { Option } = Select;
-const { useDebounce, useLoading, useMount } = customHooks;
+const { useDebounce, useLoading, useMount, useUnMount } = customHooks;
 
 // SearchInput页面应用主要有两种情况 
 // 页面级：路由切换，应保持原有数据，需要默认 labelInValue 初始化值；
 // 弹窗：只需要保存当前value值即可，弹窗关闭打开时只需要配合initList 保存当前value，label即可；
 
-export default function SearchInput({
+const SearchInput = memo(function SearchInput({
   value: controlVal,
   onChange,
   initList,         // 初始化数据配置
@@ -33,7 +33,7 @@ export default function SearchInput({
   labelInValue,     // 绑定数据为{ value: "string" , label: "string" } 需与接口配合使用
   ...extra
 }) {
-  const [data, setData] = useState(initList || []);
+  const [data, setData] = useState([]);
   const appState = useMemo(() => {
     const instance = new AppState();
     instance.isGetLoading = false;
@@ -64,6 +64,10 @@ export default function SearchInput({
     }
   });
 
+  useEffect(() => {
+    data.length === 0 && setData(initList);
+  }, [data.length, initList])
+
   const onSearch = useCallback((value) => {
     if (value) {
       handleSearch(value, queryField);
@@ -88,7 +92,9 @@ export default function SearchInput({
   >
     {data && data.map(d => <Option value={d[schema.value]} key={d[schema.key]}>{d[schema.label]}</Option>)}
   </Select>)
-}
+});
+
+export default SearchInput;
 
 SearchInput.propTypes = {
   isInit: PropTypes.bool,

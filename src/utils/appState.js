@@ -173,7 +173,7 @@ class AppState {
 
   // 私有属性代表appState 默认拦截处理
   #willRequest = (config) => {
-    console.log('开始请求', config);
+    // console.log('开始请求', config);
     let { body, headers, formData } = config;
     // fetch默认请求方式设为 POST
     if (!config.method) { config.method = "POST" }
@@ -191,7 +191,7 @@ class AppState {
   }
 
   #willResponse = (response) => {
-    console.log('结束请求', response.url);
+    // console.log('结束请求', response.url);
     loadingPage.end();
     // OSS 签名认证特殊处理
     const ossUrl = "http://cdn-oss-data-zxhj.oss-cn-zhangjiakou.aliyuncs.com/";
