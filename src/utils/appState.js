@@ -13,7 +13,6 @@ const { baseUrl } = initEnv;
 
 // 支持 search 参数url化,并且将 search 参数删除
 function addSearch(url, init) {
-  // console.log(url, JSON.stringify(init), 'url')
   // eslint-disable-next-line no-unused-expressions
   init &&
     Object.keys(init).forEach(key => {
@@ -23,9 +22,7 @@ function addSearch(url, init) {
           throw Error("类型", "search对象传入值不能为null等");
         }
         searchObj = removeEmptyField(searchObj);
-        // console.log(searchObj, 'searchObj')
         const searchUrl = search(searchObj);
-        // console.log(searchUrl, ' searchUrl')
         url += searchUrl;
         delete init[key];
       }
@@ -119,33 +116,46 @@ function initUrl(url, init) {
 
 // 经实例化以后可直接调用 appState.uploadFile() | appState.fetch()
 class AppState {
+  // formData 命名对象， 
+  // formData 数据类型；
+  // object形式；
+  // 字符串
+  //  或者 undefined 
 
+  // 直接return  formData 数据类型 || 字符串 || undefined 
   static updateBody(body, formData) {
+    // console.log(JSON.stringify(body), formData, ' body ,formData,')
     formData = formData && { ...formData };
-    if (!body) {
+
+    if (JSON.stringify(body) === '{}') {
+      return
+    }
+
+    if (!body && !formData) {
       return body
     }
 
-    // body为 FormData类型
-    if (Object.getPrototypeOf(body).constructor.name === "FormData" || typeof body === "string") {
+    // body为 FormData类型 || 字符串
+    if (body && Object.getPrototypeOf(body).constructor.name === "FormData" || typeof body === "string") {
       return body
+    }
+
+    if (typeof body === "object") {
+      return JSON.stringify(body)
     }
 
     // 处理FormData数据
-    if (formData) {
+    if (typeof formData === 'object') {
       const _formData = new FormData();
       formData = removeEmptyField(formData);
       Object.keys(formData).forEach(key => {
         _formData.append(key, formData[key]);
       });
-      body = _formData;
-      return body
+      return _formData
     }
-
-    return JSON.stringify(removeEmptyField(body));
   }
 
-  static updateHeader(body, headers) {
+  static updateHeader(body, headers, formData) {
     headers = headers && { ...headers };
     const loginToken = getCookie(initEnv.cookieName);
     // 初始化默认头部
@@ -154,7 +164,7 @@ class AppState {
       ...removeEmptyField(headers),
     });
     // 假如body类型为FormData,则header头部删除Content-type，改为自适应
-    if (body && Object.getPrototypeOf(body).constructor.name === "FormData") {
+    if ((body && Object.getPrototypeOf(body).constructor.name === "FormData") || typeof formData === "object") {
       defaultHeaders.delete("Content-Type");
     }
     // 请求前拦截，用户登录情况下写入请求头token
@@ -173,25 +183,24 @@ class AppState {
 
   // 私有属性代表appState 默认拦截处理
   #willRequest = (config) => {
-    // console.log('开始请求', config);
     let { body, headers, formData } = config;
     // fetch默认请求方式设为 POST
     if (!config.method) { config.method = "POST" }
     // 默认 GET 请求打开
     if (this.isGetLoading) { loadingPage.start() }
 
-    const newHeader = AppState.updateHeader(body, headers);
+    const newHeader = AppState.updateHeader(body, headers, formData);
     const newBody = AppState.updateBody(body, formData);
-
-    return {
+    // console.log(newBody, 'newBody');
+    formData && delete config.formData;
+    return ({
       ...config,
       headers: newHeader,
       body: newBody,
-    };
+    });
   }
 
   #willResponse = (response) => {
-    // console.log('结束请求', response.url);
     loadingPage.end();
     // OSS 签名认证特殊处理
     const ossUrl = "http://cdn-oss-data-zxhj.oss-cn-zhangjiakou.aliyuncs.com/";
@@ -276,6 +285,7 @@ class AppState {
   // 通用请求
   fetch(url, init) {
     let { newURL, newINIT } = this.#updateUrl(url, init);
+    // console.log(newURL, newINIT, 'newURL ,newINIT');
     return c_fetch({
       input: newURL,
       init: newINIT,

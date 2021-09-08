@@ -22,10 +22,11 @@ const webpackConfigDev = {
   plugins: [
     new HtmlWebpackPlugin({ template: './public/index.html', }),
     // new webpack.NamedModulesPlugin(),
-    // new webpack.DefinePlugin({
-    //   "buildEnv": JSON.stringify(process.env.BUILD_ENV || 'pre-release'),
-    //   "appName": JSON.stringify(process.env.APP_NAME || 'SAAS')
-    // }),
+    // 注意生产环境下禁止写这个!!! 通用设置也不要写
+    new webpack.DefinePlugin({
+      "buildEnv": JSON.stringify(process.env.BUILD_ENV || 'pre-release'),
+      "appName": JSON.stringify(process.env.APP_NAME || 'SAAS')
+    }),
     new webpack.HotModuleReplacementPlugin()
   ]
 }

@@ -12,13 +12,11 @@ import { message } from 'antd';
 let interceptors_req = [], interceptors_res = [];
 
 function c_fetch({ input, init = {}, willRequest, willResponse }) {
-
   init = willRequest(init);
   //interceptors_req是拦截请求的拦截处理函数集合
   interceptors_req.forEach(interceptors => {
     init = interceptors(init);
   })
-
   //在原生fetch外面封装一个promise，为了在promise里面可以对fetch请求的结果做拦截处理。
   //同时，保证c_fetch函数返回的结果是个promise对象。
   return new Promise(function (resolve, reject) {

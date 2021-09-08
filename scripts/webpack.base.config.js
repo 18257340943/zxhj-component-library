@@ -44,10 +44,6 @@ const webpackConfigBase = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.DefinePlugin({
-      "buildEnv": JSON.stringify(process.env.BUILD_ENV || 'pre-release'),
-      "appName": JSON.stringify(process.env.APP_NAME || 'SAAS')
-    }),
   ]
 }
 module.exports = webpackConfigBase
