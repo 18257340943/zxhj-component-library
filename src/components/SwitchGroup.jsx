@@ -3,8 +3,7 @@ import { Switch } from 'antd'
 import { makeStyles } from "@material-ui/styles";
 import PropTypes from 'prop-types';
 
-export default function SwitchGroup({ label, list, value, onChange, ...extra }) {
-  const defaultWidth = 200;
+export default function SwitchGroup({ list, value, onChange, handleChange, ...extra }) {
   // const [ ] = useState(list);
   const classes = makeStyles(() => ({
     topWrapper: {
@@ -20,9 +19,10 @@ export default function SwitchGroup({ label, list, value, onChange, ...extra }) 
     },
   }))();
 
-  // const [switch0, switch1] = list;
-  // const { label: label0, value: value0, ...extra0 } = switch0;
-  // const { label: label1, value: value1, ...extra1 } = switch1;
+  const switchChange = (status, item) => {
+    handleChange ? handleChange(status) : onChange(status ? item.switchVal : undefined)
+  }
+
   // switch 默认也支持参数配置;
   return (<div className={classes.topWrapper} {...extra}>
     {
@@ -32,22 +32,12 @@ export default function SwitchGroup({ label, list, value, onChange, ...extra }) 
           <span className={classes.label}>{label}</span>
           <Switch
             checked={switchVal === value}
-            onChange={status => onChange(status ? switchVal : undefined)}
+            onChange={status => switchChange(status, item)}
             {...extra}
           />
         </div>)
       })
     }
-
-    { }
-    {/* {<div className={classes.switchBox} key={value1}>
-      <span className={classes.label}>{label1}</span>
-      <Switch
-        checked={value1 === value}
-        onChange={status => onChange(status ? value1 : value0)}
-        {...extra1}
-      />
-    </div>} */}
   </div>)
 }
 

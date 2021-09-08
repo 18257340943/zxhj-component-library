@@ -1,4 +1,7 @@
 
+
+console.log(buildEnv, 'buildEnv');
+
 class InitEnv {
   constructor() {
     this.env = buildEnv === "online" ? "" : "pre";

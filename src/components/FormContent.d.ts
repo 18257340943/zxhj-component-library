@@ -4,7 +4,8 @@ import React from "react";
 interface FormContentProps {
   content: string,
   wrapperStyle: object,
-  formItemLayout: object
+  formItemLayout: object,
+  style: style
 }
 
 

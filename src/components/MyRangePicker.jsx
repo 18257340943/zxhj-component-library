@@ -16,7 +16,6 @@ export default function MyRangePicker({
   isMs,
   format,
   ...extra }) {
-
   let result;
   switch (type) {
     case "timestamp":
