@@ -10,7 +10,7 @@
   },
   "plugins": [
     "react-hot-loader/babel", // react 热更新
-    // "@babel/transform-runtime",
+    "@babel/transform-runtime",
     [
       "@babel/plugin-proposal-decorators",
       {
