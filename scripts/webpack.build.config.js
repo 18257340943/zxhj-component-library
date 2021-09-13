@@ -19,10 +19,13 @@ const webpackConfigProd = {
     libraryTarget: "umd",
   },
   externals: [
-    "react",
-    'react-dom',
-    'antd',
-    '@ant-design/icons'
+    "react", 
+    "react-dom", 
+    "antd", 
+    "@ant-design/icons",
+    "prop-types",
+    "moment",
+    "@material-ui/styles"
   ],
   devtool: isEnvProduction? 'source-map':'cheap-module-eval-source-map' ,  
   optimization: {

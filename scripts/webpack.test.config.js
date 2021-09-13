@@ -4,20 +4,22 @@ const webpackConfigBase = require('./webpack.base.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { merge } = require('webpack-merge');
 
+const distPath = resolve(__dirname, '../dist');
+
 const webpackConfigDev = {
   mode: 'development',
-  entry: resolve(__dirname, '../src/test/index.js'),
+  entry: resolve(__dirname, '../test/index.js'),
   output: {
-    path: resolve(__dirname, '../build'),
+    path: distPath,
     filename: 'index.js',
   },
   devtool: 'cheap-module-eval-source-map',
   devServer: {
-    contentBase: resolve(__dirname,  '../build'),
+    contentBase: distPath,
     hot: true,
     open: true,
     host: 'localhost',
-    port: 'auto',
+    port: 8888,
   },
   plugins: [
     new HtmlWebpackPlugin(),
@@ -26,7 +28,7 @@ const webpackConfigDev = {
       "buildEnv": JSON.stringify(process.env.BUILD_ENV || 'pre-release'),
       "appName": JSON.stringify(process.env.APP_NAME || 'SAAS')
     }),
-    new webpack.HotModuleReplacementPlugin()
+    // new webpack.HotModuleReplacementPlugin()
   ]
 }
 

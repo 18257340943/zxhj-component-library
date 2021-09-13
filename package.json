@@ -3,6 +3,12 @@
   "version": "3.0.103",
   "main": "lib/index.js",
   "module": "es/index.js",
+  "files": [
+    "lib/*",
+    "es/*"
+  ],
+  "typings": "src/typings/index.d.ts",
+  "sideEffects": false,
   "author": {
     "name": "18257340943",
     "email": "18257340943@163.com"
@@ -26,17 +32,11 @@
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
-  "files": [
-    "src/**/*",
-    "script/*",
-    "lib/*"
-  ],
-  "typings": "src/typings/index.d.ts",
   "scripts": {
     "init": "eslint --init",
-    "build:prod": "cross-env NODE_ENV=production webpack --config ./scripts/webpack.prod.config.js",
-    "build:dev": "cross-env NODE_ENV=development webpack --config ./scripts/webpack.prod.config.js",
-    "start": "webpack-dev-server --config ./scripts/webpack.dev.config.js",
+    "build:prod": "cross-env NODE_ENV=production webpack --config ./scripts/webpack.build.config.js",
+    "build:dev": "cross-env NODE_ENV=development webpack --config ./scripts/webpack.build.config.js",
+    "test": "webpack-dev-server --config ./scripts/webpack.test.config.js",
     "eslint:fix": "eslint --fix ./src/test.jsx",
     "lint": "eslint ./src/test.jsx",
     "patch": "npm version patch",
@@ -83,8 +83,11 @@
     "regenerator-runtime": "^0.13.7",
     "rollup": "^2.56.3",
     "rollup-plugin-clear": "^2.0.7",
-    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-generate-html-template": "^1.7.0",
+    "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-polyfill-node": "^0.7.0",
+    "rollup-plugin-postcss": "^4.0.1",
+    "rollup-plugin-serve": "^1.1.0",
     "style-loader": "^1.2.1",
     "terser-webpack-plugin": "^3.0.6",
     "types": "^0.1.1",
@@ -101,6 +104,5 @@
     "antd": ">=4.15.2",
     "react": ">=17.0.1",
     "react-dom": ">=17.0.1"
-  },
-  "sideEffects": false
+  }
 }

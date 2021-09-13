@@ -26,7 +26,7 @@ const webpackConfigBase = {
     alias: {
       '@': srcDir,
       'react': 'react',
-      'react-dom': '@hot-loader/react-dom'
+      // 'react-dom': '@hot-loader/react-dom'
     },
     extensions: ['.js', '.jsx']
   },

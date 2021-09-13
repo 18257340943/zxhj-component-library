@@ -17,7 +17,7 @@ import {
   loadingPage,
   customHooks,
   cookie
-} from '../components';
+} from '../dist/index';
 
 const { getCookie, setCookie } = cookie;
 
@@ -188,6 +188,6 @@ const App = () => {
 
 //要实现局部热更新，必须要添加此句
 // eslint-disable-next-line no-undef
-if (module.hot) { module.hot.accept() }
+// if (module.hot) { module.hot.accept() }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.body);

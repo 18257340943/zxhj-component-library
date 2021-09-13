@@ -1,12 +1,9 @@
 {
   "ext": "js,jsx,css,.d.ts",
   "verbose": false,
-  "ignore": [
-    "lib/",
-    "node_modules/"
-  ],
+  "ignore": ["lib/", "node_modules/"],
   "watch": "src/",
-  "exec": "npm run build:dev",
+  "exec": "npm run build",
   "debug": true,
   "delay": 1000
 }
