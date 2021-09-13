@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const srcDir = path.join(__dirname, '../src');
+const srcDir = path.resolve(__dirname, '../src');
 
 const webpackConfigBase = {
   module: {
@@ -9,10 +9,7 @@ const webpackConfigBase = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            // presets: ['@babel/preset-react', "@babel/preset-env"],
-          }
+          loader: 'babel-loader?cacheDirectory',
         }
       },
       {
@@ -20,15 +17,6 @@ const webpackConfigBase = {
         use: [
           'style-loader',
           'css-loader',
-          // {
-          //   loader: 'postcss-loader',
-          //   options: {
-          //     ident: 'postcss',
-          //     plugins: (loader) => [
-          //       require('autoprefixer')()
-          //     ],
-          //   }
-          // }
         ],
         sideEffects: true
       },
@@ -46,4 +34,5 @@ const webpackConfigBase = {
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]
 }
+
 module.exports = webpackConfigBase

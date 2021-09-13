@@ -1,7 +1,0 @@
-# .npmignore 
-# src
-# scripts
-# public
-.babelrc
-.gitignore
-node_modules

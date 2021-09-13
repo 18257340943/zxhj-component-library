@@ -13,15 +13,14 @@ const webpackConfigDev = {
   },
   devtool: 'cheap-module-eval-source-map',
   devServer: {
-    contentBase: resolve('../build'),
+    contentBase: resolve(__dirname,  '../build'),
     hot: true,
-    // open: true,
+    open: true,
     host: 'localhost',
-    port: 8080,
+    port: 'auto',
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './public/index.html', }),
-    // new webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin(),
     // 注意生产环境下禁止写这个!!! 通用设置也不要写
     new webpack.DefinePlugin({
       "buildEnv": JSON.stringify(process.env.BUILD_ENV || 'pre-release'),
