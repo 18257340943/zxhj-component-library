@@ -1,7 +1,5 @@
 /* eslint-disable camelcase */  // 允许使用_下划线命名形式
 
-import { message } from "antd";
-
 import loadingPage from "../components/loadingPage";
 import cookie from "./cookie";
 import { search, removeEmptyField } from "./utils";
