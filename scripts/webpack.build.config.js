@@ -10,13 +10,13 @@ const isEnvProduction = process.env.NODE_ENV === 'production';
 const webpackConfigProd = {
   mode: isEnvProduction?'production':'development',
   entry: {
-    "index": resolve(__dirname, '../src/components/index.js')
+    index: resolve(__dirname, "../src/components/index.js"),
   },
   output: {
-    filename: '[name].js',
-    path: resolve(__dirname, '../lib'),
-    library: '@zxhj/component-library',
-    libraryTarget: 'umd'
+    filename: "[name].js",
+    path: resolve(__dirname, "../dist"),
+    library: "@zxhj/component-library",
+    libraryTarget: "umd",
   },
   externals: [
     "react",
