@@ -17,11 +17,11 @@ const extensions = [".js", ".jsx"];
 export default {
   input: ["./src/components/index.js"],
   output: [
-    // {
-    //   file: pkg.module,
-    //   format: "esm",
-    //   sourcemap: true
-    // },
+    {
+      file: pkg.module,
+      format: "esm",
+      sourcemap: true
+    },
     {
       file: pkg.main,
       format: "commonjs",

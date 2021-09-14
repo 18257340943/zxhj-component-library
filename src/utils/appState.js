@@ -48,69 +48,6 @@ function initUrl(url, init) {
   }
   return newURL
 }
-// 带有请求拦截器的 fetch
-// const _fetch = (() => {
-//   // 定义用来存储拦截请求和拦截响应结果的处理函数集合
-//   let interceptors_req = [];
-//   let interceptors_res = [];
-
-//   function c_fetch(input, init = {}) {
-//     // interceptors_req是拦截请求的拦截处理函数集合
-//     interceptors_req.forEach(interceptors => init = interceptors(init));
-//     // interceptors_req = [];
-//     return new Promise((resolve, reject) => {
-//       // 发起fetch请求，fetch请求的形参是接收上层函数的形参
-//       fetch(input, init)
-//         .then(res => {
-//           // interceptors_res.forEach(interceptors => {
-//           //   // 拦截器对响应结果做  处理，把处理后的结果返回给响应结果。
-//           //   res = interceptors(res);
-//           // });
-//           // interceptors_res = [];
-//           // 常规数据返回 res.json()
-//           if (Object.getPrototypeOf(res).constructor.name === "Response") {
-//             return res.json();
-//           }
-//           resolve(res);
-//         })
-//         .then(result => {
-//           const { data, code } = result;
-//           // 通过 code === 200? 认证直接报错
-//           if (code !== 200) {
-//             const errorMsg = data && data.message || "服务器异常！";
-//             message.error(errorMsg);
-//             reject(errorMsg);
-//             return;
-//           }
-//           // 部分接口通过data中的 succeed? 判断
-//           if (data && data.succeed === 0) {
-//             message.error(data && data.msg || "服务器异常！");
-//             return;
-//           }
-
-//           // 将拦截器处理后的响应结果resolve出去
-//           resolve(data);
-//         })
-//         .catch(err => {
-//           reject(err);
-//         });
-//     });
-//   }
-
-//   c_fetch.interceptors = {
-//     request: {
-//       use(callback) {
-//         interceptors_req.push(callback);
-//       },
-//     },
-//     response: {
-//       use(callback) {
-//         interceptors_res.push(callback);
-//       },
-//     },
-//   };
-
-// })();
 
 // 经实例化以后可直接调用 appState.uploadFile() | appState.fetch()
 class AppState {
@@ -122,10 +59,10 @@ class AppState {
 
   // 直接return  formData 数据类型 || 字符串 || undefined 
   static updateBody(body, formData) {
-    // console.log(JSON.stringify(body), formData, ' body ,formData,')
     formData = formData && { ...formData };
 
-    if (JSON.stringify(body) === '{}') {
+    if (body && Object.getPrototypeOf(body).constructor.name !== "FormData" && JSON.stringify(body) === '{}'  ) {
+      console.log( body,'body')
       return
     }
 
@@ -134,7 +71,7 @@ class AppState {
     }
 
     // body为 FormData类型 || 字符串
-    if (body && Object.getPrototypeOf(body).constructor.name === "FormData" || typeof body === "string") {
+    if ((body && Object.getPrototypeOf(body).constructor.name === "FormData") || typeof body === "string") {
       return body
     }
 
