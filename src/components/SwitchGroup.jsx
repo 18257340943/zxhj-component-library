@@ -32,7 +32,13 @@ export default function SwitchGroup({ list, value, onChange, handleChange, ...ex
           <span className={classes.label}>{label}</span>
           <Switch
             checked={switchVal === value}
-            onChange={status => switchChange(status, item)}
+            onChange={status => {
+              delete item.value;
+              switchChange(status, {
+                ...item,
+                switchVal
+              });
+            }}
             {...extra}
           />
         </div>)
