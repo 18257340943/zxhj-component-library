@@ -62,7 +62,6 @@ class AppState {
     formData = formData && { ...formData };
 
     if (body && Object.getPrototypeOf(body).constructor.name !== "FormData" && JSON.stringify(body) === '{}'  ) {
-      console.log( body,'body')
       return
     }
 
@@ -72,6 +71,7 @@ class AppState {
 
     // body为 FormData类型 || 字符串
     if ((body && Object.getPrototypeOf(body).constructor.name === "FormData") || typeof body === "string") {
+      console.log( body,'body');
       return body
     }
 
